@@ -29,8 +29,7 @@ void initFuncs(FunPtr *f, uint32_t cnt) {
     // f[0x10] = load;
 }
 
-void initRegs(Reg *r, uint32_t cnt)
-{
+void initRegs(Reg *r, uint32_t cnt) {
     uint32_t i;
     for (i = 0; i < cnt; i++) {
         r[i].type = 0;
