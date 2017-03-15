@@ -8,6 +8,7 @@
 
 #define NUM_REGS   (256)
 #define NUM_FUNCS  (256)
+#define SIZE_RAM   (8092)
 
 // Global variable that indicates if the process is running.
 static bool is_running = true;
@@ -41,6 +42,7 @@ int main(int argc, char** argv) {
     VMContext vm;
     Reg r[NUM_REGS];
     FunPtr f[NUM_FUNCS];
+    char* mem;
     FILE* bytecode;
     uint32_t* pc;
 
@@ -51,8 +53,10 @@ int main(int argc, char** argv) {
     initRegs(r, NUM_REGS);
     // Initialize interpretation functions.
     initFuncs(f, NUM_FUNCS);
+    // Initialize memory.
+    mem = (char *)calloc(1, SIZE_RAM);
     // Initialize VM context.
-    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f);
+    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, mem);
 
     // Load bytecode file
     bytecode = fopen(argv[1], "rb");
@@ -60,9 +64,6 @@ int main(int argc, char** argv) {
         perror("fopen");
         return 1;
     }
-
-    // Initialize RAM for VM.
-    RAM = (char *)calloc(1, SIZE_RAM);
 
     while (is_running) {
         // TODO: Read 4-byte bytecode, and set the pc accordingly
