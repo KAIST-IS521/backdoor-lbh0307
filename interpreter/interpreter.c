@@ -61,6 +61,9 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    // Initialize RAM for VM.
+    RAM = (char *)calloc(1, SIZE_RAM);
+
     while (is_running) {
         // TODO: Read 4-byte bytecode, and set the pc accordingly
         stepVMContext(&vm, &pc);
