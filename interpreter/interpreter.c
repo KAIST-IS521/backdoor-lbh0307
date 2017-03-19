@@ -21,15 +21,71 @@ void usageExit() {
     exit(1);
 }
 
+void halt(struct VMContext* ctx, uint32_t instr) {
+}
+
+void load(struct VMContext* ctx, uint32_t instr) {
+}
+
+void store(struct VMContext* ctx, uint32_t instr) {
+}
+
+void move(struct VMContext* ctx, uint32_t instr) {
+}
+
+void puti(struct VMContext* ctx, uint32_t instr) {
+}
+
+void add(struct VMContext* ctx, uint32_t instr) {
+}
+
+void sub(struct VMContext* ctx, uint32_t instr) {
+}
+
+void gt(struct VMContext* ctx, uint32_t instr) {
+}
+
+void ge(struct VMContext* ctx, uint32_t instr) {
+}
+
+void eq(struct VMContext* ctx, uint32_t instr) {
+}
+
+void ite(struct VMContext* ctx, uint32_t instr) {
+}
+
+void jmp(struct VMContext* ctx, uint32_t instr) {
+}
+
+void putstr(struct VMContext* ctx, uint32_t instr) {
+}
+
+void getstr(struct VMContext* ctx, uint32_t instr) {
+}
+
+void invalidInstError(struct VMContext* ctx, uint32_t instr) {
+}
+
 void initFuncs(FunPtr *f, uint32_t cnt) {
     uint32_t i;
     for (i = 0; i < cnt; i++) {
-        f[i] = NULL;
+        f[i] = invalidInstError;
     }
 
-    // TODO: initialize function pointers
-    // f[0x00] = halt;
-    // f[0x10] = load;
+    f[0x00] = halt;
+    f[0x10] = load;
+    f[0x20] = store;
+    f[0x30] = move;
+    f[0x40] = puti;
+    f[0x50] = add;
+    f[0x60] = sub;
+    f[0x70] = gt;
+    f[0x80] = ge;
+    f[0x90] = eq;
+    f[0xa0] = ite;
+    f[0xb0] = jmp;
+    f[0xc0] = putstr;
+    f[0xd0] = getstr;
 }
 
 void initRegs(Reg *r, uint32_t cnt) {
