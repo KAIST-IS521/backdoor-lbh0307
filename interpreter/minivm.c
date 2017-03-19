@@ -45,11 +45,12 @@ void initVMContext(struct VMContext* ctx,
 // Reads an instruction, executes it, then steps to the next instruction.
 // stepVMContext :: VMContext -> uint32_t** -> Effect()
 void stepVMContext(struct VMContext* ctx) {
-    // Read a 32-bit bytecode instruction.
     uint32_t instr;
+    // Check validity of pc
     if (ctx->pc > ctx->codeSize) {
         exit(-1);
     }
+    // Read a 32-bit bytecode instruction.
     instr = ctx->code[ctx->pc];
 
     // Dispatch to an opcode-handler.
