@@ -22,6 +22,7 @@ void usageExit() {
 }
 
 void halt(struct VMContext* ctx, uint32_t instr) {
+    is_running = false;
 }
 
 void load(struct VMContext* ctx, uint32_t instr) {
