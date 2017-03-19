@@ -128,9 +128,23 @@ void jmp(struct VMContext* ctx, uint32_t instr) {
 }
 
 void putstr(struct VMContext* ctx, uint32_t instr) {
+    Reg src = ctx->r[EXTRACT_B1(instr)];
+    if (src.value >= ctx->memSize)
+    {
+        is_running = false;
+        return;
+    }
+    printf("%.*s", ctx->memSize - src.value, ctx->mem + src.value);
 }
 
 void getstr(struct VMContext* ctx, uint32_t instr) {
+    Reg dst = ctx->r[EXTRACT_B1(instr)];
+    if (dst.value >= ctx->memSize)
+    {
+        is_running = false;
+        return;
+    }
+    fgets(ctx->mem + dst.value, ctx->memSize - dst.value, stdin);
 }
 
 void invalidInstError(struct VMContext* ctx, uint32_t instr) {
