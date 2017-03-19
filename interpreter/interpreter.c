@@ -65,6 +65,8 @@ void getstr(struct VMContext* ctx, uint32_t instr) {
 }
 
 void invalidInstError(struct VMContext* ctx, uint32_t instr) {
+    perror("Invalid instruction");
+    is_running = false;
 }
 
 void initFuncs(FunPtr *f, uint32_t cnt) {
