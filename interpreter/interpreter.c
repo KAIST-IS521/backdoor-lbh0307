@@ -67,18 +67,53 @@ void puti(struct VMContext* ctx, uint32_t instr) {
 }
 
 void add(struct VMContext* ctx, uint32_t instr) {
+    Reg l, r, dst;
+    dst = ctx->r[EXTRACT_B1(instr)];
+      l = ctx->r[EXTRACT_B2(instr)];
+      r = ctx->r[EXTRACT_B3(instr)];
+
+    dst.value = l.value + r.value;
+    ++ctx->pc;
 }
 
 void sub(struct VMContext* ctx, uint32_t instr) {
+    Reg l, r, dst;
+    dst = ctx->r[EXTRACT_B1(instr)];
+      l = ctx->r[EXTRACT_B2(instr)];
+      r = ctx->r[EXTRACT_B3(instr)];
+
+    dst.value = l.value + r.value;
+    ++ctx->pc;
 }
 
 void gt(struct VMContext* ctx, uint32_t instr) {
+    Reg l, r, dst;
+    dst = ctx->r[EXTRACT_B1(instr)];
+      l = ctx->r[EXTRACT_B2(instr)];
+      r = ctx->r[EXTRACT_B3(instr)];
+
+    dst.value = l.value > r.value;
+    ++ctx->pc;
 }
 
 void ge(struct VMContext* ctx, uint32_t instr) {
+    Reg l, r, dst;
+    dst = ctx->r[EXTRACT_B1(instr)];
+      l = ctx->r[EXTRACT_B2(instr)];
+      r = ctx->r[EXTRACT_B3(instr)];
+
+    dst.value = l.value >= r.value;
+    ++ctx->pc;
 }
 
 void eq(struct VMContext* ctx, uint32_t instr) {
+    Reg l, r, dst;
+    dst = ctx->r[EXTRACT_B1(instr)];
+      l = ctx->r[EXTRACT_B2(instr)];
+      r = ctx->r[EXTRACT_B3(instr)];
+
+    dst.value = l.value == r.value;
+    ++ctx->pc;
 }
 
 void ite(struct VMContext* ctx, uint32_t instr) {
