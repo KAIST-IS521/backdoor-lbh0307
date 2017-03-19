@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------------
 
 #include <stdint.h>
+#include <stdlib.h>
 
 #ifndef MINIVM_H
 #define MINIVM_H
@@ -80,7 +81,7 @@ void initVMContext(struct VMContext* ctx,
                          const off_t codeSize,
                                 Reg* registers,
                              FunPtr* funtable,
-                            uint8_t* mem
+                            uint8_t* mem,
                            uint32_t* code);
 
 // Reads an instruction, executes it, then steps to the next instruction.
