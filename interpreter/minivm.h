@@ -77,7 +77,7 @@ void initVMContext(struct VMContext* ctx,
                       const uint32_t numRegs,
                       const uint32_t numFuns,
                       const uint32_t sizeRam,
-                      const uint32_t codeSize,
+                         const off_t codeSize,
                                 Reg* registers,
                              FunPtr* funtable,
                             uint8_t* mem
