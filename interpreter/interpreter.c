@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
     VMContext vm;
     Reg r[NUM_REGS];
     FunPtr f[NUM_FUNCS];
-    char* mem;
+    uint8_t* mem;
     FILE* bytecode;
     uint32_t* pc;
 
@@ -53,9 +53,9 @@ int main(int argc, char** argv) {
     // Initialize interpretation functions.
     initFuncs(f, NUM_FUNCS);
     // Initialize memory.
-    mem = (char *)calloc(1, SIZE_RAM);
+    mem = (uint8_t *)calloc(1, SIZE_RAM);
     // Initialize VM context.
-    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, mem);
+    initVMContext(&vm, NUM_REGS, NUM_FUNCS, SIZE_RAM, r, f, mem);
 
     // Load bytecode file
     bytecode = fopen(argv[1], "rb");

@@ -36,9 +36,10 @@ typedef struct Reg {
 typedef struct VMContext {
     uint32_t numRegs;
     uint32_t numFuns;
+    uint32_t memSize;
     Reg* r;           // Ptr to register array.
     FunPtr* funtable; // Ptr to a funptr table.
-    char* mem;
+    uint8_t* mem;
 } VMContext;
 
 
@@ -72,9 +73,10 @@ void dispatch(struct VMContext* ctx, const uint32_t instr);
 void initVMContext(struct VMContext* ctx,
                       const uint32_t numRegs,
                       const uint32_t numFuns,
+                      const uint32_t sizeRam,
                                 Reg* registers,
                              FunPtr* funtable,
-                               char* mem);
+                            uint8_t* mem);
 
 // Reads an instruction, executes it, then steps to the next instruction.
 // stepVMContext :: VMContext -> uint32_t** -> Effect()
