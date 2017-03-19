@@ -37,6 +37,7 @@ typedef struct VMContext {
     uint32_t numRegs;
     uint32_t numFuns;
     uint32_t memSize;
+    uint32_t codeSize;
     Reg* r;           // Ptr to register array.
     FunPtr* funtable; // Ptr to a funptr table.
     uint8_t* mem;
@@ -76,6 +77,7 @@ void initVMContext(struct VMContext* ctx,
                       const uint32_t numRegs,
                       const uint32_t numFuns,
                       const uint32_t sizeRam,
+                      const uint32_t codeSize,
                                 Reg* registers,
                              FunPtr* funtable,
                             uint8_t* mem
