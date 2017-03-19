@@ -76,7 +76,7 @@ void dispatch(struct VMContext* ctx, const uint32_t instr);
 void initVMContext(struct VMContext* ctx,
                       const uint32_t numRegs,
                       const uint32_t numFuns,
-                      const uint32_t sizeRam,
+                      const uint32_t memSize,
                          const off_t codeSize,
                                 Reg* registers,
                              FunPtr* funtable,
