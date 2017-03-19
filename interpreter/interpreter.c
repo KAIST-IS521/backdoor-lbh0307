@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "minivm.h"
 
 #define NUM_REGS   (256)
@@ -37,13 +40,43 @@ void initRegs(Reg *r, uint32_t cnt) {
     }
 }
 
+off_t readCode(const char* path, uint32_t** code) {
+    off_t size;
+    struct stat sb;
+    int fd;
+
+    fd = open(path, O_RDONLY);
+    if (fd == -1) {
+        perror("fopen");
+        exit(-1);
+    }
+
+    if (fstat (fd, &sb) == -1) {
+        perror ("fstat");
+        exit(-1);
+    }
+
+    *code = mmap (0, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (*code == MAP_FAILED) {
+        perror ("mmap");
+        exit(-1);
+    }
+
+    if (close (fd) == -1) {
+        perror ("close");
+    }
+
+    return sb.st_size;
+}
+
 int main(int argc, char** argv) {
     VMContext vm;
     Reg r[NUM_REGS];
     FunPtr f[NUM_FUNCS];
     uint8_t* mem;
-    FILE* bytecode;
-    uint32_t* pc;
+    uint32_t* code;
+    off_t codeSize;
+
 
     // There should be at least one argument.
     if (argc < 2) usageExit();
@@ -54,22 +87,17 @@ int main(int argc, char** argv) {
     initFuncs(f, NUM_FUNCS);
     // Initialize memory.
     mem = (uint8_t *)calloc(1, SIZE_RAM);
+    // readCode from bytecode file
+    codeSize = readCode(argv[1], &code);
     // Initialize VM context.
-    initVMContext(&vm, NUM_REGS, NUM_FUNCS, SIZE_RAM, r, f, mem);
-
-    // Load bytecode file
-    bytecode = fopen(argv[1], "rb");
-    if (bytecode == NULL) {
-        perror("fopen");
-        return 1;
-    }
+    initVMContext(&vm, NUM_REGS, NUM_FUNCS, SIZE_RAM, codeSize,
+            r, f, mem, code);
 
     while (is_running) {
-        // TODO: Read 4-byte bytecode, and set the pc accordingly
-        stepVMContext(&vm, &pc);
+        stepVMContext(&vm);
     }
 
-    fclose(bytecode);
+    munmap(code, codeSize);
 
     // Zero indicates normal termination.
     return 0;
