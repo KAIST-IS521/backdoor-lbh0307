@@ -47,7 +47,7 @@ void initVMContext(struct VMContext* ctx,
 void stepVMContext(struct VMContext* ctx) {
     uint32_t instr;
     // Check validity of pc
-    if (ctx->pc > ctx->codeSize) {
+    if (ctx->pc >= ctx->codeSize) {
         exit(-1);
     }
     // Read a 32-bit bytecode instruction.
