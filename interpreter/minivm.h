@@ -30,7 +30,6 @@ typedef void (*FunPtr)(struct VMContext* ctx, const uint32_t);
 
 //CHANGE THE INTERNALS OF THIS FOR YOUR OWN VM!
 typedef struct Reg {
-    uint32_t type;
     uint32_t value;
 } Reg;
 
