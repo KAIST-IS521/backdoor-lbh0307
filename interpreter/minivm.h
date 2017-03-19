@@ -40,6 +40,8 @@ typedef struct VMContext {
     Reg* r;           // Ptr to register array.
     FunPtr* funtable; // Ptr to a funptr table.
     uint8_t* mem;
+    uint32_t* code;
+    uint32_t pc;
 } VMContext;
 
 
@@ -76,11 +78,12 @@ void initVMContext(struct VMContext* ctx,
                       const uint32_t sizeRam,
                                 Reg* registers,
                              FunPtr* funtable,
-                            uint8_t* mem);
+                            uint8_t* mem
+                           uint32_t* code);
 
 // Reads an instruction, executes it, then steps to the next instruction.
 // stepVMContext :: VMContext -> uint32_t** -> Effect()
-void stepVMContext(struct VMContext* ctx, uint32_t** pc);
+void stepVMContext(struct VMContext* ctx);
 
 
 //---------------------------------------------------------
