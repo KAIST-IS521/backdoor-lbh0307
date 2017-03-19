@@ -117,9 +117,14 @@ void eq(struct VMContext* ctx, uint32_t instr) {
 }
 
 void ite(struct VMContext* ctx, uint32_t instr) {
+    Reg test = ctx->r[EXTRACT_B1(instr)];
+    uint8_t thn = EXTRACT_B2(instr), els = EXTRACT_B3(instr);
+
+    ctx->pc = test.value ? thn : els;
 }
 
 void jmp(struct VMContext* ctx, uint32_t instr) {
+    ctx->pc = EXTRACT_B1(instr);
 }
 
 void putstr(struct VMContext* ctx, uint32_t instr) {
