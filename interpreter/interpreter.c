@@ -40,6 +40,17 @@ void load(struct VMContext* ctx, uint32_t instr) {
 }
 
 void store(struct VMContext* ctx, uint32_t instr) {
+    Reg src, dst;
+    dst = ctx->r[EXTRACT_B1(instr)];
+    src = ctx->r[EXTRACT_B2(instr)];
+
+    if (dst.value >= ctx->memSize) {
+        is_running = false;
+        return;
+    }
+
+    ctx->mem[dst.value] = src.value;
+    ++ctx->pc;
 }
 
 void move(struct VMContext* ctx, uint32_t instr) {
