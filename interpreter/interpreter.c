@@ -62,6 +62,8 @@ void move(struct VMContext* ctx, uint32_t instr) {
 }
 
 void puti(struct VMContext* ctx, uint32_t instr) {
+    ctx->r[EXTRACT_B1(instr)].value = EXTRACT_B2(instr);
+    ++ctx->pc;
 }
 
 void add(struct VMContext* ctx, uint32_t instr) {
