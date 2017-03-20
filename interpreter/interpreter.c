@@ -141,12 +141,24 @@ void putstr(struct VMContext* ctx, uint32_t instr) {
 
 void getstr(struct VMContext* ctx, uint32_t instr) {
     Reg dst = ctx->r[EXTRACT_B1(instr)];
+    uint32_t idx;
     if (dst.value >= ctx->memSize)
     {
         is_running = false;
         return;
     }
-    fgets(ctx->mem + dst.value, ctx->memSize - dst.value, stdin);
+
+    for(idx = dst.value; idx < ctx->memSize - dst.value; idx++) {
+        char ch = getchar();
+        if (ch == '\0' || ch == '\n') {
+            ctx->mem[idx] = 0;
+            break;
+        }
+        else {
+            ctx->mem[idx] = ch;
+        }
+    }
+    ++ctx->pc;
 }
 
 void invalidInstError(struct VMContext* ctx, uint32_t instr) {
