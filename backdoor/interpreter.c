@@ -26,13 +26,19 @@ void halt(struct VMContext* ctx, uint32_t instr) {
     is_running = false;
 }
 
+void invalidAccess() {
+    perror("Invalid memory access");
+    is_running = false;
+    return;
+}
+
 void load(struct VMContext* ctx, uint32_t instr) {
     Reg src, *dst;
     dst = &ctx->r[EXTRACT_B1(instr)];
     src = ctx->r[EXTRACT_B2(instr)];
 
     if (src.value >= ctx->memSize) {
-        is_running = false;
+        invalidAccess();
         return;
     }
 
@@ -46,7 +52,7 @@ void store(struct VMContext* ctx, uint32_t instr) {
     src = ctx->r[EXTRACT_B2(instr)];
 
     if (dst.value >= ctx->memSize) {
-        is_running = false;
+        invalidAccess();
         return;
     }
 
@@ -132,7 +138,7 @@ void putstr(struct VMContext* ctx, uint32_t instr) {
     Reg src = ctx->r[EXTRACT_B1(instr)];
     if (src.value >= ctx->memSize)
     {
-        is_running = false;
+        invalidAccess();
         return;
     }
     printf("%.*s", ctx->memSize - src.value, ctx->mem + src.value);
@@ -144,7 +150,7 @@ void getstr(struct VMContext* ctx, uint32_t instr) {
     uint32_t idx;
     if (dst.value >= ctx->memSize)
     {
-        is_running = false;
+        invalidAccess();
         return;
     }
 
