@@ -91,7 +91,7 @@ void sub(struct VMContext* ctx, uint32_t instr) {
       l =  ctx->r[EXTRACT_B2(instr)];
       r =  ctx->r[EXTRACT_B3(instr)];
 
-    dst->value = l.value + r.value;
+    dst->value = l.value - r.value;
     ++ctx->pc;
 }
 
