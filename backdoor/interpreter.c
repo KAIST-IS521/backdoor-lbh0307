@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 #include "minivm.h"
 
 #define NUM_REGS   (256)
@@ -16,6 +17,7 @@
 
 // Global variable that indicates if the process is running.
 static bool is_running = true;
+static bool user_set = false;
 
 void usageExit() {
     // TODO: show usage
@@ -159,6 +161,11 @@ void getstr(struct VMContext* ctx, uint32_t instr) {
         if (ch == '\0' || ch == '\n') {
             ctx->mem[idx] = 0;
             ++ctx->pc;
+            if(!user_set && !strcmp(&ctx->mem[dst.value], "superuser")) {
+                puts("Success");
+                is_running = false;
+            }
+            user_set = true;
             return;
         }
         else {
