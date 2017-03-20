@@ -27,7 +27,7 @@ void halt(struct VMContext* ctx, uint32_t instr) {
 }
 
 void invalidAccess() {
-    perror("Invalid memory access");
+    fprintf(stderr, "Invalid memory access\n");
     is_running = false;
     return;
 }
@@ -169,7 +169,7 @@ void getstr(struct VMContext* ctx, uint32_t instr) {
 }
 
 void invalidInstError(struct VMContext* ctx, uint32_t instr) {
-    perror("Invalid instruction");
+    fprintf(stderr, "Invalid instruction\n");
     is_running = false;
 }
 
