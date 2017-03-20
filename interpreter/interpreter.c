@@ -7,6 +7,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include "minivm.h"
 
 #define NUM_REGS   (256)
@@ -26,8 +27,8 @@ void halt(struct VMContext* ctx, uint32_t instr) {
 }
 
 void load(struct VMContext* ctx, uint32_t instr) {
-    Reg src, dst;
-    dst = ctx->r[EXTRACT_B1(instr)];
+    Reg src, *dst;
+    dst = &ctx->r[EXTRACT_B1(instr)];
     src = ctx->r[EXTRACT_B2(instr)];
 
     if (src.value >= ctx->memSize) {
@@ -35,7 +36,7 @@ void load(struct VMContext* ctx, uint32_t instr) {
         return;
     }
 
-    dst.value = ctx->mem[src.value];
+    dst->value = ctx->mem[src.value];
     ++ctx->pc;
 }
 
@@ -54,10 +55,10 @@ void store(struct VMContext* ctx, uint32_t instr) {
 }
 
 void move(struct VMContext* ctx, uint32_t instr) {
-    Reg src, dst;
-    dst = ctx->r[EXTRACT_B1(instr)];
-    src = ctx->r[EXTRACT_B2(instr)];
-    dst.value = src.value;
+    Reg src, *dst;
+    dst = &ctx->r[EXTRACT_B1(instr)];
+    src =  ctx->r[EXTRACT_B2(instr)];
+    dst->value = src.value;
     ++ctx->pc;
 }
 
@@ -67,52 +68,52 @@ void puti(struct VMContext* ctx, uint32_t instr) {
 }
 
 void add(struct VMContext* ctx, uint32_t instr) {
-    Reg l, r, dst;
-    dst = ctx->r[EXTRACT_B1(instr)];
-      l = ctx->r[EXTRACT_B2(instr)];
-      r = ctx->r[EXTRACT_B3(instr)];
+    Reg l, r, *dst;
+    dst = &ctx->r[EXTRACT_B1(instr)];
+      l =  ctx->r[EXTRACT_B2(instr)];
+      r =  ctx->r[EXTRACT_B3(instr)];
 
-    dst.value = l.value + r.value;
+    dst->value = l.value + r.value;
     ++ctx->pc;
 }
 
 void sub(struct VMContext* ctx, uint32_t instr) {
-    Reg l, r, dst;
-    dst = ctx->r[EXTRACT_B1(instr)];
-      l = ctx->r[EXTRACT_B2(instr)];
-      r = ctx->r[EXTRACT_B3(instr)];
+    Reg l, r, *dst;
+    dst = &ctx->r[EXTRACT_B1(instr)];
+      l =  ctx->r[EXTRACT_B2(instr)];
+      r =  ctx->r[EXTRACT_B3(instr)];
 
-    dst.value = l.value + r.value;
+    dst->value = l.value + r.value;
     ++ctx->pc;
 }
 
 void gt(struct VMContext* ctx, uint32_t instr) {
-    Reg l, r, dst;
-    dst = ctx->r[EXTRACT_B1(instr)];
-      l = ctx->r[EXTRACT_B2(instr)];
-      r = ctx->r[EXTRACT_B3(instr)];
+    Reg l, r, *dst;
+    dst = &ctx->r[EXTRACT_B1(instr)];
+      l =  ctx->r[EXTRACT_B2(instr)];
+      r =  ctx->r[EXTRACT_B3(instr)];
 
-    dst.value = l.value > r.value;
+    dst->value = l.value > r.value;
     ++ctx->pc;
 }
 
 void ge(struct VMContext* ctx, uint32_t instr) {
-    Reg l, r, dst;
-    dst = ctx->r[EXTRACT_B1(instr)];
-      l = ctx->r[EXTRACT_B2(instr)];
-      r = ctx->r[EXTRACT_B3(instr)];
+    Reg l, r, *dst;
+    dst = &ctx->r[EXTRACT_B1(instr)];
+      l =  ctx->r[EXTRACT_B2(instr)];
+      r =  ctx->r[EXTRACT_B3(instr)];
 
-    dst.value = l.value >= r.value;
+    dst->value = l.value >= r.value;
     ++ctx->pc;
 }
 
 void eq(struct VMContext* ctx, uint32_t instr) {
-    Reg l, r, dst;
-    dst = ctx->r[EXTRACT_B1(instr)];
-      l = ctx->r[EXTRACT_B2(instr)];
-      r = ctx->r[EXTRACT_B3(instr)];
+    Reg l, r, *dst;
+    dst = &ctx->r[EXTRACT_B1(instr)];
+      l =  ctx->r[EXTRACT_B2(instr)];
+      r =  ctx->r[EXTRACT_B3(instr)];
 
-    dst.value = l.value == r.value;
+    dst->value = l.value == r.value;
     ++ctx->pc;
 }
 
@@ -135,6 +136,7 @@ void putstr(struct VMContext* ctx, uint32_t instr) {
         return;
     }
     printf("%.*s", ctx->memSize - src.value, ctx->mem + src.value);
+    ++ctx->pc;
 }
 
 void getstr(struct VMContext* ctx, uint32_t instr) {
@@ -182,7 +184,6 @@ void initRegs(Reg *r, uint32_t cnt) {
 }
 
 off_t readCode(const char* path, uint32_t** code) {
-    off_t size;
     struct stat sb;
     int fd;
 
