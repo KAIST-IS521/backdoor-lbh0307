@@ -1,0 +1,3 @@
+# TEST
+
+Simple string duplicator
