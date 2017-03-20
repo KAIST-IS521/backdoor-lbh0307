@@ -154,17 +154,18 @@ void getstr(struct VMContext* ctx, uint32_t instr) {
         return;
     }
 
-    for(idx = dst.value; idx < ctx->memSize - dst.value; idx++) {
+    for(idx = dst.value; idx < ctx->memSize; idx++) {
         char ch = getchar();
         if (ch == '\0' || ch == '\n') {
             ctx->mem[idx] = 0;
-            break;
+            ++ctx->pc;
+            return;
         }
         else {
             ctx->mem[idx] = ch;
         }
     }
-    ++ctx->pc;
+    invalidAccess();
 }
 
 void invalidInstError(struct VMContext* ctx, uint32_t instr) {
